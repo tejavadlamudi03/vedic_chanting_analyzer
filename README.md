@@ -2,10 +2,10 @@
 
 > ⚠️ **This project is currently under active development.** Features may be incomplete or subject to change.
 
-![Status](https://img.shields.io/badge/status-under%20development-orange)
+![Status](https://img.shields.io/badge/Status-Under%20Development-orange)
 ![ROS2](https://img.shields.io/badge/ROS2-Humble-blue)
-![Python](https://img.shields.io/badge/Python-3.10-green)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+![Python](https://img.shields.io/badge/Python-3.10-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A real-time AI-based Vedic chanting analysis and feedback system. It captures voice input through a microphone, detects pitch using the **aubio YIN algorithm**, classifies Vedic Svaras, and provides instant AI feedback on chanting quality.
 
@@ -323,7 +323,7 @@ Open browser at **http://localhost:8501**
 
 MIT License
 
-Copyright (c) 2026 Bhanu Teja Vadlamudi
+Copyright (c) 2026 Bhanuteja Vadlamudi
 Master's Student — Autonomous Driving, Hochschule Coburg, Germany
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -340,10 +340,10 @@ ATTRIBUTION NOTICE:
 If you use, modify, or build upon this project, you are kindly requested to
 give credit to the original author:
 
-    Bhanu Teja Vadlamudi
+    Bhanuteja Vadlamudi
     Master's Student — Autonomous Driving
     Hochschule Coburg, Germany
-    GitHub: https://github.com/<tejavadlamudi03>
+    GitHub: https://github.com/tejavadlamudi03
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -355,11 +355,6 @@ SOFTWARE.
 
 ---
 
-## 👤 Author
-
-**Bhanu**
-Master's Student — Autonomous Driving, Hochschule Coburg
-AI-assisted Robotics and Speech Processing Research
 
 ## 🙏 Attribution
 
@@ -369,11 +364,11 @@ please give credit to the original author:
 **Bhanu Teja Vadlamudi**
 Master's Student — Autonomous Driving
 Hochschule Coburg, Germany
-GitHub: https://github.com/<tejavadlamudi03>
+GitHub: https://github.com/tejavadlamudi03
 
 You are free to use this project under the MIT License,
 but a mention or credit is greatly appreciated. 🙏
 
 ---
 
-> © 2026 Bhanu Teja Vadlamudi. Built as part of AI-assisted
+> © 2026 Bhanuteja Vadlamudi. Built as part of AI-assisted
