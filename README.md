@@ -262,4 +262,3 @@ Master's Student - Autonomous Driving, Hochschule Coburg
 AI-assisted robotics and speech processing research.
 
 =======================================================
-EOF
