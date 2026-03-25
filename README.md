@@ -1,5 +1,4 @@
-# Add "under development" notice at the top of the file
-cat > /home/bhanu/Documents/Projects/vedic_ws/src/vedic_chanting_analyzer/README.txt << 'EOF'
+
 =======================================================
         VEDIC CHANTING ANALYZER - ROS2 PROJECT
 =======================================================
