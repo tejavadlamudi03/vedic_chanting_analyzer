@@ -1,337 +1,379 @@
-=======================================================
-        VEDIC CHANTING ANALYZER - ROS2 PROJECT
-=======================================================
+# 🕉 Vedic Chanting Analyzer — ROS2 Project
 
-  STATUS: Under Active Development
-  Version: 0.1.0
-  Author:  Bhanu
-  License: MIT
+> ⚠️ **This project is currently under active development.** Features may be incomplete or subject to change.
 
-=======================================================
-TABLE OF CONTENTS
-=======================================================
+![Status](https://img.shields.io/badge/status-under%20development-orange)
+![ROS2](https://img.shields.io/badge/ROS2-Humble-blue)
+![Python](https://img.shields.io/badge/Python-3.10-green)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-  1. Project Description
-  2. System Architecture
-  3. Project Structure
-  4. Prerequisites
-  5. Installation and Build
-  6. Running the System
-  7. ROS2 Topics
-  8. Vedic Swara Reference
-  9. AI Feedback Logic
-  10. Node Parameters
-  11. Streamlit Dashboard
-  12. Development Status
-  13. Troubleshooting
-  14. Dependencies
+A real-time AI-based Vedic chanting analysis and feedback system. It captures voice input through a microphone, detects pitch using the **aubio YIN algorithm**, classifies Vedic Svaras, and provides instant AI feedback on chanting quality.
 
-=======================================================
-1. PROJECT DESCRIPTION
-=======================================================
+---
 
-  A real-time AI-based Vedic chanting analysis and
-  feedback system. It captures voice input through a
-  microphone, detects pitch using the aubio YIN
-  algorithm, classifies Vedic Svaras, and provides
-  instant AI feedback on chanting quality.
+## 📋 Table of Contents
 
-  Built With:
-    - ROS2 Humble (robot middleware framework)
-    - Python 3.10
-    - aubio (pitch detection)
-    - Redis (data bridge)
-    - Streamlit + Plotly (live dashboard)
+1. [System Architecture](#system-architecture)
+2. [Project Structure](#project-structure)
+3. [Prerequisites](#prerequisites)
+4. [Installation and Build](#installation-and-build)
+5. [Running the System](#running-the-system)
+6. [ROS2 Topics](#ros2-topics)
+7. [Vedic Swara Reference](#vedic-swara-reference)
+8. [AI Feedback Logic](#ai-feedback-logic)
+9. [Node Parameters](#node-parameters)
+10. [Streamlit Dashboard](#streamlit-dashboard)
+11. [Development Status](#development-status)
+12. [Troubleshooting](#troubleshooting)
+13. [Dependencies](#dependencies)
 
-=======================================================
-2. SYSTEM ARCHITECTURE
-=======================================================
+---
 
-  Microphone
-      |
-      v
-  [audio_capture_node]
-      |
-      | /raw_audio (Float32MultiArray)
-      v
-  [pitch_analysis_node]
-      |
-      | /pitch_data (JSON)
-      v
-  [ai_feedback_node]
-      |
-      | /chanting_feedback (JSON)
-      |
-      +--------> [feedback_display_node]  (terminal)
-      |
-      v
-  [ros2_redis_bridge]
-      |
-      v
-    Redis
-      |
-      v
-  [Streamlit Dashboard]
-  http://localhost:8501
+## 🏗️ System Architecture
 
-=======================================================
-3. PROJECT STRUCTURE
-=======================================================
+Microphone Input
+|
+v
+[audio_capture_node]
+|
+| /raw_audio (Float32MultiArray)
+v
+[pitch_analysis_node]
+|
+| /pitch_data (JSON)
+v
+[ai_feedback_node]
+|
+| /chanting_feedback (JSON)
+|
++--------> [feedback_display_node] Terminal output
+|
+v
+[ros2_redis_bridge]
+|
+v
+Redis
+|
+v
+[Streamlit Dashboard] → http://localhost:8501
 
-  vedic_chanting_analyzer/
-  |
-  |-- vedic_chanting_analyzer/       (Python module)
-  |   |-- __init__.py
-  |   |-- audio_capture_node.py
-  |   |-- pitch_analysis_node.py
-  |   |-- ai_feedback_node.py
-  |   |-- feedback_display_node.py
-  |   |-- ros2_redis_bridge.py
-  |
-  |-- launch/
-  |   |-- vedic_analyzer.launch.py
-  |
-  |-- resource/
-  |   |-- vedic_chanting_analyzer
-  |
-  |-- streamlit_dashboard.py
-  |-- package.xml
-  |-- setup.py
-  |-- setup.cfg
-  |-- requirements.txt
-  |-- README.txt
 
-=======================================================
-4. PREREQUISITES
-=======================================================
+---
 
-  Operating System : Ubuntu 22.04
-  ROS2 Version     : Humble Hawksbill
-  Python Version   : 3.10+
-  Redis Server     : Required for Streamlit bridge
+## 🗂️ Project Structure
 
-  Install Redis:
-    sudo apt install redis-server
-    sudo systemctl enable redis
-    sudo systemctl start redis
+vedic_chanting_analyzer/
+├── vedic_chanting_analyzer/
+│ ├── _init_.py
+│ ├── audio_capture_node.py
+│ ├── pitch_analysis_node.py
+│ ├── ai_feedback_node.py
+│ ├── feedback_display_node.py
+│ └── ros2_redis_bridge.py
+├── launch/
+│ └── vedic_analyzer.launch.py
+├── resource/
+│ └── vedic_chanting_analyzer
+├── streamlit_dashboard.py
+├── package.xml
+├── setup.py
+├── setup.cfg
+├── requirements.txt
+└── README.md
 
-  Install Python packages:
-    pip install -r requirements.txt
+---
 
-=======================================================
-5. INSTALLATION AND BUILD
-=======================================================
+## ⚙️ Prerequisites
 
-  Step 1 - Clone the repository:
-    cd ~/Documents/Projects/vedic_ws/src
-    git clone https://github.com/<your-username>/vedic_chanting_analyzer.git
+- Ubuntu 22.04
+- ROS2 Humble
+- Python 3.10+
+- Redis Server
 
-  Step 2 - Source ROS2:
-    source /opt/ros/humble/setup.bash
+```bash
+# Install Redis
+sudo apt install redis-server
+sudo systemctl enable redis
+sudo systemctl start redis
 
-  Step 3 - Build the package:
-    cd ~/Documents/Projects/vedic_ws
-    colcon build --packages-select vedic_chanting_analyzer
+# Install Python dependencies
+pip install -r requirements.txt
+```
 
-  Step 4 - Source the workspace:
-    source install/setup.bash
+---
 
-=======================================================
-6. RUNNING THE SYSTEM
-=======================================================
+## 🛠️ Installation and Build
 
-  Open 4 separate terminals and run:
+```bash
+# Clone the repository
+cd ~/Documents/Projects/vedic_ws/src
+git clone https://github.com/<your-username>/vedic_chanting_analyzer.git
 
-  Terminal 1 - ROS2 Nodes:
-    source ~/Documents/Projects/vedic_ws/install/setup.bash
-    ros2 launch vedic_chanting_analyzer vedic_analyzer.launch.py
+# Source ROS2
+source /opt/ros/humble/setup.bash
 
-  Terminal 2 - Redis Server:
-    sudo systemctl start redis
+# Build the package
+cd ~/Documents/Projects/vedic_ws
+colcon build --packages-select vedic_chanting_analyzer
 
-  Terminal 3 - Monitor Topics (optional):
-    source ~/Documents/Projects/vedic_ws/install/setup.bash
-    ros2 topic echo /pitch_data
-    ros2 topic echo /chanting_feedback
+# Source the workspace
+source install/setup.bash
+```
 
-  Terminal 4 - Streamlit Dashboard:
-    cd ~/Documents/Projects/vedic_ws
-    streamlit run streamlit_dashboard.py
-    Open browser: http://localhost:8501
+---
 
-=======================================================
-7. ROS2 TOPICS
-=======================================================
+## 🚀 Running the System
 
-  Topic                 Type                        Description
-  --------------------  --------------------------  -------------------
-  /raw_audio            Float32MultiArray           Raw mic audio frames
-  /pitch_data           String (JSON)               Hz, Swara, confidence
-  /chanting_feedback    String (JSON)               AI feedback and advice
+Open **4 separate terminals**:
 
-  /pitch_data JSON example:
-  {
-    "frequency_hz"   : 261.63,
-    "confidence"     : 0.92,
-    "detected_swara" : "Sa",
-    "deviation_cents": 8.5,
-    "timestamp"      : 1234567890
-  }
+**Terminal 1 — Launch all ROS2 nodes**
+```bash
+source ~/Documents/Projects/vedic_ws/install/setup.bash
+ros2 launch vedic_chanting_analyzer vedic_analyzer.launch.py
+```
 
-  /chanting_feedback JSON example:
-  {
-    "status"              : "active",
-    "dominant_swara"      : "Sa",
-    "quality"             : "Excellent (Shuddha Swara)",
-    "advice"              : "Perfect intonation. Maintain this level.",
-    "accuracy_percent"    : 94.5,
-    "pitch_trend"         : "Stable pitch - good intonation",
-    "avg_deviation_cents" : 9.2
-  }
+**Terminal 2 — Start Redis**
+```bash
+sudo systemctl start redis
+```
 
-=======================================================
-8. VEDIC SWARA REFERENCE  (Default: Sa = C4 = 261.63 Hz)
-=======================================================
+**Terminal 3 — Monitor topics (optional)**
+```bash
+source ~/Documents/Projects/vedic_ws/install/setup.bash
+ros2 topic echo /pitch_data
+ros2 topic echo /chanting_feedback
+```
 
-  Swara    Type      Ratio      Frequency (Hz)
-  -------  --------  ---------  --------------
-  Sa       Achala    1/1        261.63
-  Ri1      Chala     256/243    275.62
-  Ri2      Chala     9/8        294.33
-  Ga1      Chala     32/27      309.03
-  Ga2      Chala     81/64      331.12
-  Ga3      Chala     5/4        327.03
-  Ma1      Chala     4/3        348.83
-  Ma2      Chala     45/32      367.92
-  Pa       Achala    3/2        392.44
-  Dha1     Chala     128/81     413.43
-  Dha2     Chala     5/3        436.05
-  Ni1      Chala     16/9       465.12
-  Ni3      Chala     15/8       490.55
+**Terminal 4 — Streamlit Dashboard**
+```bash
+cd ~/Documents/Projects/vedic_ws
+streamlit run streamlit_dashboard.py
+```
+Open browser at **http://localhost:8501**
 
-  Note: Change tonic by editing tonic_hz parameter
-        in launch/vedic_analyzer.launch.py
+---
 
-=======================================================
-9. AI FEEDBACK LOGIC
-=======================================================
+## 🔗 ROS2 Topics
 
-  Deviation         Quality Label              Advice
-  ---------------   ------------------------   ----------------------
-  Less than 15 c    Excellent (Shuddha Swara)  Maintain intonation
-  15 to 30 cents    Good (minor variation)     Focus on breath control
-  30 to 50 cents    Needs improvement          Slow down and retune
-  More than 50 c    Poor intonation            Practice with tanpura
+| Topic | Type | Description |
+|---|---|---|
+| `/raw_audio` | `Float32MultiArray` | Raw microphone audio frames |
+| `/pitch_data` | `String` (JSON) | Detected Hz, Swara, confidence, deviation |
+| `/chanting_feedback` | `String` (JSON) | AI quality assessment and advice |
 
-  Tolerance Rules:
-    Sa and Pa  (Achala - immovable)  : +/- 15 cents  (strict)
-    All others (Chala  - movable)    : +/- 25 cents  (relaxed)
+**`/pitch_data` example:**
+```json
+{
+  "frequency_hz": 261.63,
+  "confidence": 0.92,
+  "detected_swara": "Sa",
+  "deviation_cents": 8.5,
+  "timestamp": 1234567890
+}
+```
 
-=======================================================
-10. NODE PARAMETERS
-=======================================================
+**`/chanting_feedback` example:**
+```json
+{
+  "status": "active",
+  "dominant_swara": "Sa",
+  "quality": "Excellent (Shuddha Swara)",
+  "advice": "Perfect intonation. Maintain this level.",
+  "accuracy_percent": 94.5,
+  "pitch_trend": "Stable pitch - good intonation",
+  "avg_deviation_cents": 9.2
+}
+```
 
-  audio_capture_node:
-    sample_rate   44100     Audio sample rate in Hz
-    buffer_size   2048      Frames per audio buffer
-    channels      1         Mono microphone input
+---
 
-  pitch_analysis_node:
-    tonic_hz      261.63    Sa reference frequency in Hz
-    sample_rate   44100     Must match audio_capture_node
-    buffer_size   2048      Must match audio_capture_node
+## 🎼 Vedic Swara Reference
 
-  ai_feedback_node:
-    window_size       30    Smoothing window in frames
-    feedback_rate_hz  2.0   Feedback publish rate in Hz
+> Default tonic: **Sa = C4 = 261.63 Hz** — change via `tonic_hz` in `vedic_analyzer.launch.py`
 
-  ros2_redis_bridge:
-    redis_host    localhost  Redis server hostname
-    redis_port    6379       Redis server port
+| Swara | Type | Ratio | Frequency (Hz) |
+|---|---|---|---|
+| Sa   | Achala | 1/1      | 261.63 |
+| Ri1  | Chala  | 256/243  | 275.62 |
+| Ri2  | Chala  | 9/8      | 294.33 |
+| Ga1  | Chala  | 32/27    | 309.03 |
+| Ga2  | Chala  | 81/64    | 331.12 |
+| Ga3  | Chala  | 5/4      | 327.03 |
+| Ma1  | Chala  | 4/3      | 348.83 |
+| Ma2  | Chala  | 45/32    | 367.92 |
+| Pa   | Achala | 3/2      | 392.44 |
+| Dha1 | Chala  | 128/81   | 413.43 |
+| Dha2 | Chala  | 5/3      | 436.05 |
+| Ni1  | Chala  | 16/9     | 465.12 |
+| Ni3  | Chala  | 15/8     | 490.55 |
 
-=======================================================
-11. STREAMLIT DASHBOARD PANELS
-=======================================================
+---
 
-  Panel               Type                  Data Source
-  ------------------  --------------------  ----------------------
-  KPI Metrics Row     st.metric cards       /latest_pitch
-  Pitch Tracking      Plotly line chart     pitch_history (Redis)
-  Swara Distribution  Plotly bar chart      pitch_history (Redis)
-  Deviation Gauge     Plotly gauge          /chanting_feedback
-  AI Feedback Card    HTML styled card      /chanting_feedback
-  Session Log Table   st.dataframe          Rolling 20 events
+## 🤖 AI Feedback Logic
 
-=======================================================
-12. DEVELOPMENT STATUS
-=======================================================
+| Avg Deviation | Quality | Advice |
+|---|---|---|
+| < 15 cents   | ✅ Excellent (Shuddha Swara) | Maintain intonation |
+| 15–30 cents  | 🟡 Good (minor variation)    | Focus on breath control |
+| 30–50 cents  | 🟠 Needs improvement         | Slow down and retune |
+| > 50 cents   | 🔴 Poor intonation           | Practice with tanpura |
 
-  COMPLETED:
-    [x] Microphone audio capture (PyAudio)
-    [x] Real-time pitch detection (aubio YIN algorithm)
-    [x] Vedic Swara classification (13 Svaras)
-    [x] AI feedback with deviation and trend analysis
-    [x] ROS2 pipeline (5 nodes)
-    [x] Redis bridge for Streamlit integration
-    [x] Real-time Streamlit dashboard with Plotly charts
-    [x] Launch file for all nodes
+- **Sa and Pa** (Achala — immovable): strict tolerance **±15 cents**
+- **All others** (Chala — movable): tolerance **±25 cents**
 
-  IN PROGRESS / PLANNED:
-    [ ] DTW (Dynamic Time Warping) for mantra pattern matching
-    [ ] Gamaka (ornamental oscillation) detection
-    [ ] TTS voice feedback (ros-humble-tts)
-    [ ] PostgreSQL session history logging
-    [ ] Grafana dashboard integration
-    [ ] Mobile-friendly Streamlit layout
-    [ ] Tonic auto-detection from first 3 seconds
+---
 
-=======================================================
-13. TROUBLESHOOTING
-=======================================================
+## 🧩 Node Parameters
 
-  Problem  : No module named aubio
-  Solution : pip install aubio pyaudio
+### audio_capture_node
+| Parameter | Default | Description |
+|---|---|---|
+| `sample_rate` | 44100 | Audio sample rate (Hz) |
+| `buffer_size` | 2048  | Frames per buffer |
+| `channels`    | 1     | Mono input |
 
-  Problem  : No module named vedic_chanting_analyzer
-  Solution : Node files must be inside the module folder
-             ls .../vedic_chanting_analyzer/vedic_chanting_analyzer/
-             (NOT inside a scripts/ folder)
+### pitch_analysis_node
+| Parameter | Default | Description |
+|---|---|---|
+| `tonic_hz`    | 261.63 | Sa reference frequency |
+| `sample_rate` | 44100  | Must match capture node |
+| `buffer_size` | 2048   | Must match capture node |
 
-  Problem  : streamlit_dashboard.py not found
-  Solution : cd ~/Documents/Projects/vedic_ws
-             streamlit run streamlit_dashboard.py
+### ai_feedback_node
+| Parameter | Default | Description |
+|---|---|---|
+| `window_size`      | 30  | Smoothing window (frames) |
+| `feedback_rate_hz` | 2.0 | Feedback publish rate (Hz) |
 
-  Problem  : Redis connection refused
-  Solution : sudo systemctl start redis
-             redis-cli ping   (must return PONG)
+### ros2_redis_bridge
+| Parameter | Default | Description |
+|---|---|---|
+| `redis_host` | localhost | Redis server host |
+| `redis_port` | 6379      | Redis server port |
 
-  Problem  : Dashboard shows "Waiting for ROS2"
-  Solution : ros2 topic list
-             /pitch_data and /chanting_feedback must appear
+---
 
-  Problem  : colcon build fails with "package does not exist"
-  Solution : rm -rf build/ install/ log/
-             source /opt/ros/humble/setup.bash
-             colcon build --packages-select vedic_chanting_analyzer
+## 📊 Streamlit Dashboard
 
-=======================================================
-14. PYTHON DEPENDENCIES
-=======================================================
+| Panel | Chart Type | Data Source |
+|---|---|---|
+| KPI Metrics Row    | `st.metric` cards     | `/latest_pitch`, `/latest_feedback` |
+| Pitch Tracking     | Plotly line chart     | `pitch_history` Redis list |
+| Swara Distribution | Plotly bar chart      | `pitch_history` aggregated |
+| Deviation Gauge    | Plotly gauge          | `/chanting_feedback` |
+| AI Feedback Card   | Styled HTML card      | `/chanting_feedback` |
+| Session Log        | `st.dataframe`        | Rolling last 20 events |
 
-  Package       Version    Purpose
-  -----------   ---------  --------------------------
-  aubio         >=0.4.9    Pitch detection (YIN)
-  pyaudio       >=0.2.13   Microphone audio capture
-  librosa       >=0.10.0   Audio analysis utilities
-  numpy         >=1.24.0   Numerical processing
-  scipy         >=1.10.0   Signal processing
-  sounddevice   >=0.4.6    Audio I/O
-  redis         >=4.6.0    ROS2 to Streamlit bridge
-  streamlit     >=1.32.0   Live dashboard framework
-  plotly        >=5.18.0   Interactive charts
-  pandas        >=2.0.0    Data manipulation
+---
 
-=======================================================
-  Bhanu | Master's in Autonomous Driving | Hochschule Coburg
-  AI-assisted Robotics and Speech Processing Research
-=======================================================
+## 📌 Development Status
+
+### ✅ Completed
+- [x] Microphone audio capture (PyAudio)
+- [x] Real-time pitch detection (aubio YIN algorithm)
+- [x] Vedic Swara classification (13 Svaras)
+- [x] AI feedback with deviation and trend analysis
+- [x] ROS2 pipeline (5 nodes)
+- [x] Redis bridge for Streamlit integration
+- [x] Real-time Streamlit dashboard with Plotly charts
+- [x] Launch file for all nodes
+
+### 🔧 In Progress / Planned
+- [ ] DTW (Dynamic Time Warping) for mantra pattern matching
+- [ ] Gamaka (ornamental oscillation) detection
+- [ ] TTS voice feedback using `ros-humble-tts`
+- [ ] PostgreSQL session history logging
+- [ ] Grafana dashboard integration
+- [ ] Mobile-friendly Streamlit layout
+- [ ] Tonic auto-detection from first 3 seconds of input
+
+---
+
+## 🔧 Troubleshooting
+
+| Problem | Solution |
+|---|---|
+| `No module named aubio` | `pip install aubio pyaudio` |
+| `No module named vedic_chanting_analyzer` | Node files must be inside `vedic_chanting_analyzer/` folder, **not** `scripts/` |
+| `streamlit_dashboard.py not found` | `cd ~/Documents/Projects/vedic_ws` then run streamlit |
+| Redis connection refused | `sudo systemctl start redis` then `redis-cli ping` (must return PONG) |
+| Dashboard shows Waiting for ROS2 | Run `ros2 topic list` — `/pitch_data` and `/chanting_feedback` must appear |
+| colcon build fails | `rm -rf build/ install/ log/` then rebuild fresh |
+
+---
+
+## 📦 Dependencies
+
+| Package | Version | Purpose |
+|---|---|---|
+| `aubio`       | >=0.4.9  | Pitch detection (YIN algorithm) |
+| `pyaudio`     | >=0.2.13 | Microphone audio capture |
+| `librosa`     | >=0.10.0 | Audio analysis utilities |
+| `numpy`       | >=1.24.0 | Numerical processing |
+| `scipy`       | >=1.10.0 | Signal processing |
+| `sounddevice` | >=0.4.6  | Audio I/O |
+| `redis`       | >=4.6.0  | ROS2 to Streamlit bridge |
+| `streamlit`   | >=1.32.0 | Live dashboard framework |
+| `plotly`      | >=5.18.0 | Interactive charts |
+| `pandas`      | >=2.0.0  | Data manipulation |
+
+---
+
+## 📄 License
+
+MIT License
+
+Copyright (c) 2026 Bhanu Teja Vadlamudi
+Master's Student — Autonomous Driving, Hochschule Coburg, Germany
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in ALL
+copies or substantial portions of the Software.
+
+ATTRIBUTION NOTICE:
+If you use, modify, or build upon this project, you are kindly requested to
+give credit to the original author:
+
+    Bhanu Teja Vadlamudi
+    Master's Student — Autonomous Driving
+    Hochschule Coburg, Germany
+    GitHub: https://github.com/<tejavadlamudi03>
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## 👤 Author
+
+**Bhanu**
+Master's Student — Autonomous Driving, Hochschule Coburg
+AI-assisted Robotics and Speech Processing Research
+
+## 🙏 Attribution
+
+If you use, modify, fork, or build upon this project in any way,
+please give credit to the original author:
+
+**Bhanu Teja Vadlamudi**
+Master's Student — Autonomous Driving
+Hochschule Coburg, Germany
+GitHub: https://github.com/<tejavadlamudi03>
+
+You are free to use this project under the MIT License,
+but a mention or credit is greatly appreciated. 🙏
+
+---
+
+> © 2026 Bhanu Teja Vadlamudi. Built as part of AI-assisted
